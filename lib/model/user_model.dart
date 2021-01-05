@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 class User {
   String name, username, email, profilePath;
-  Int32x4 UUID;
+  Int32x4 id;
 }
 
 class Student extends User {
