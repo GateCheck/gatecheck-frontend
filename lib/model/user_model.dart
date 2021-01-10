@@ -2,6 +2,37 @@ import 'dart:core';
 import 'dart:typed_data';
 import 'package:gatecheck_frontend/utils/string_uuid_conversion.dart';
 
+enum UserType { User, Student, Instructor, Parent }
+
+class GenericUser {
+  UserType type;
+  dynamic value;
+
+  GenericUser(UserType type, dynamic value)
+      : this.value = value,
+        this.type = type;
+  GenericUser.fromJson(Map<String,dynamic> json){
+    switch(json['data_type']as String){
+      case 'User':
+        type=UserType.User;
+        value=User.fromJson(json);
+        break;
+      case 'Student':
+        type=UserType.Student;
+        value=Student.fromJson(json);
+        break;
+      case 'Instructor':
+        type=UserType.Instructor;
+        value=Instructor.fromJson(json);
+        break;
+      case 'Parent':
+        type=UserType.Parent;
+        value=Parent.fromJson(json);
+        break;
+    }
+  }
+}
+
 class User {
   String name, username, email, profilePath;
   Int32x4 id;
