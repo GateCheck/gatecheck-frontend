@@ -25,6 +25,22 @@ extension ProportionalInsets on BuildContext {
         bottom: size.height);
   }
 
+  double widthOf(double width) {
+    return MediaQuery.of(this).size.width / 100 * width;
+  }
+
+  double heightOf(double height) {
+    return MediaQuery.of(this).size.height / 100 * height;
+  }
+
+  double getPercentageFromWidth(double width) {
+    return width * 100 / MediaQuery.of(this).size.width;
+  }
+
+  double getPercentageFromHeight(double height) {
+    return height * 100 / MediaQuery.of(this).size.height;
+  }
+
   Size getPixelCountFromScreenPercentage(
       {double width = 0, double height = 0}) {
     if (width < 0 || width > 100) throw RangeError.range(width, 0, 100);
