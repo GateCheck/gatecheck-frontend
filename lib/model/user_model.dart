@@ -31,6 +31,31 @@ class GenericUser {
         break;
     }
   }
+
+  Map<String,dynamic> toJson(){
+    String dataType;
+    Map<String,dynamic> ret;
+    switch(type){
+      case UserType.User:
+        dataType='User';
+        ret=(value as User).toJson();
+        break;
+      case UserType.Student:
+        dataType='Student';
+        ret=(value as Student).toJson();
+        break;
+      case UserType.Instructor:
+        dataType='Instructor';
+        ret=(value as Instructor).toJson();
+        break;
+      case UserType.Parent:
+        dataType='Parent';
+        ret=(value as Parent).toJson();
+        break;
+    }
+    ret['data_type']=dataType;
+    return ret;
+  }
 }
 
 class User {
