@@ -21,10 +21,10 @@ class Request {
         from = json['from'],
         to = json['to'],
         status = json['status'],
-        id = StringToUUID(json['id']),
-        sender = StringToUUID(json['sender']),
+        id = stringToUUID(json['id']),
+        sender = stringToUUID(json['sender']),
         receivers = [
-          for(String str in json['receivers']) StringToUUID(str)
+          for(String str in json['receivers']) stringToUUID(str)
         ],
         replies = [
           for(Map<String,dynamic> m in json['replies']) Message.fromJson(m)
@@ -37,9 +37,9 @@ class Request {
     'from':from,
     'to':to,
     'status':status,
-    'id':UUIDToString(id),
-    'sender':UUIDToString(sender),
-    'receivers':receivers.map(UUIDToString).toList(),
+    'id':uuidToString(id),
+    'sender':uuidToString(sender),
+    'receivers':receivers.map(uuidToString).toList(),
     'replies':replies.map((e) => e.toJson()).toList()
   };
 }

@@ -67,14 +67,14 @@ class User {
         username = json['username'],
         email = json['email'],
         profilePath = json['profilePath'],
-        id = StringToUUID(json['id']);
+        id = stringToUUID(json['id']);
 
   Map<String, dynamic> toJson() => {
         'name': name,
         'username': username,
         'email': email,
         'profilePath': profilePath,
-        'id': UUIDToString(id)
+        'id': uuidToString(id)
       };
 }
 
@@ -105,14 +105,14 @@ class Instructor extends User {
 
   Instructor.fromJson(Map<String, dynamic> json)
       : schools = json['schools'],
-        students = [for (String str in json['students']) StringToUUID(str)],
+        students = [for (String str in json['students']) stringToUUID(str)],
         super.fromJson(json);
 
   Map<String, dynamic> toJson() {
     var ret = super.toJson();
     ret.addAll({
       'schools': schools,
-      'student': students.map(UUIDToString).toList(),
+      'student': students.map(uuidToString).toList(),
     });
     return ret;
   }
@@ -122,13 +122,13 @@ class Parent extends User {
   List<Int32x4> children;
 
   Parent.fromJson(Map<String, dynamic> json)
-      : children = [for (String str in json['children']) StringToUUID(str)],
+      : children = [for (String str in json['children']) stringToUUID(str)],
         super.fromJson(json);
 
   Map<String, dynamic> toJson() {
     var ret = super.toJson();
     ret.addAll({
-      'children': children.map(UUIDToString).toList(),
+      'children': children.map(uuidToString).toList(),
     });
     return ret;
   }

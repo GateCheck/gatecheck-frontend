@@ -9,12 +9,12 @@ class Message {
 
   Message.fromJson(Map<String, dynamic> json)
       : sendDate = json['sendDate'],
-        sender = StringToUUID(json['sender']),
+        sender = stringToUUID(json['sender']),
         text = json['text'];
   Map<String,dynamic> toJson()=>
       {
         'sendDate':sendDate,
-        'sender':UUIDToString(sender),
+        'sender':uuidToString(sender),
         'text':text
       };
 }
