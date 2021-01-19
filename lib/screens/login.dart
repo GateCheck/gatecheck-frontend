@@ -5,7 +5,7 @@ import 'package:gatecheck_frontend/components/featured_text_form_field.dart';
 import '../utils/screen_manipulation.dart';
 
 class LoginPage extends StatelessWidget {
-  final double _textFieldPercentFromSides = 30;
+  final double _textFieldPercentFromSides = 15;
   final double logoCircleRadiusAsScreenPercentage = 6;
 
   Widget getFormTextField(BuildContext ctx, String hint) {
@@ -27,10 +27,19 @@ class LoginPage extends StatelessWidget {
 
     double avatarPercentOfHeight = context.getPercentageFromHeight(avatarCircleRadius * 2);
     double percentLeft = (100 - 10 - avatarPercentOfHeight);
+    double radius = context.widthOf(15);
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.atlas),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: Icon(
+          Icons.public,
+          color: Theme.of(context).accentColor,
+          size: 50,
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       body: Center(
         child: Column(
           children: [
@@ -39,11 +48,11 @@ class LoginPage extends StatelessWidget {
             ),
             Material(
               child: CircleAvatar(
-                child: Image.asset("assets/logo_large.png", width: context.heightOf(15)),
+                child: Image.asset("assets/logo_large.png", width: radius * 0.85),
                 radius: avatarCircleRadius,
                 backgroundColor: Colors.white,
               ),
-              borderRadius: BorderRadius.circular(context.heightOf(15)),
+              borderRadius: BorderRadius.circular(radius),
               elevation: 18,
             ),
             SizedBox(
