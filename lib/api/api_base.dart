@@ -2,12 +2,14 @@ export 'dart:convert';
 export 'dart:typed_data';
 export 'package:gatecheck_frontend/utils/string_uuid_conversion.dart';
 
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-enum DataStatus { Success, Unauthorized, Failure }
 
 String api = '/api/v1';
+
+
+enum DataStatus { Success, Unauthorized, Failure }
+///this class holds data from an api request and the status of the request
 class ApiData<T> {
   DataStatus status;
   T data;

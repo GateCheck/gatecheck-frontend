@@ -2,15 +2,14 @@ import 'package:http/http.dart' as http;
 import 'package:gatecheck_frontend/model/user_model.dart';
 import 'package:gatecheck_frontend/api/api_base.dart';
 
-
 Future<ApiData<GenericUser>> currentUser(http.Client client) {
   return client.get(api + '/user').then((res) {
-    return parseResponse(res, (json)=>GenericUser.fromJson(json));
+    return parseResponse(res, (json) => GenericUser.fromJson(json));
   });
 }
 
 Future<ApiData<List<Student>>> getStudents(
-    Int32x4List studentIds, bool all, http.Client client) {
+    http.Client client, Int32x4List studentIds, bool all) {
   String query;
   if (all) {
     query = "all=true";
@@ -31,15 +30,16 @@ Future<ApiData<List<Student>>> getStudents(
   });
 }
 
+///does not immediately delete user, just prompts the server to send him an email to delete himself
 Future<ApiData<void>> deleteUser(http.Client client) {
   return client.delete(api + '/user').then(emptyResponseData);
 }
 
-Future<ApiData<void>> updateCurrentUser(GenericUser user, http.Client client) {
+Future<ApiData<void>> updateCurrentUser(http.Client client, GenericUser user) {
   return client.put(api + '/user', body: user.toJson()).then(emptyResponseData);
 }
 
-Future<ApiData<void>> updateSpecificUser(GenericUser user, http.Client client) {
+Future<ApiData<void>> updateSpecificUser(http.Client client, GenericUser user) {
   var data = user.toJson();
   return client
       .put(api + '/user/' + data['id'], body: data)
