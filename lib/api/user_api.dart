@@ -18,19 +18,17 @@ Future<ApiData<List<Student>>> getStudents(
   }
 
   return client.get(api + '/user?' + query).then((res) {
-    if (res.statusCode == 200) {
-      List<Map<String, dynamic>> json =
-          jsonDecode(res.body).cast<Map<String, dynamic>>();
+    return parseResponse(res, (value) {
+      List<Map<String, dynamic>> json = value.cast<Map<String, dynamic>>();
       List<Student> students = json.map((e) => Student.fromJson(e));
-      return ApiData(students, DataStatus.Success);
-    }
-
-    if (res.statusCode == 401) return ApiData(null, DataStatus.Unauthorized);
-    return ApiData(null, DataStatus.Failure);
+      return students;
+    });
   });
 }
 
-///does not immediately delete user, just prompts the server to send him an email to delete himself
+/**
+ * does not immediately delete user, just prompts the server to send him an email to delete himself
+ */
 Future<ApiData<void>> deleteUser(http.Client client) {
   return client.delete(api + '/user').then(emptyResponseData);
 }
