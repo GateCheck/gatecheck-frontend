@@ -9,9 +9,7 @@ String api = '/api/v1';
 
 enum DataStatus { Success, Unauthorized, Failure, ParsingException }
 
-/**
- * this class holds data from an api request and the status of the request
- */
+/// this class holds data from an api request and the status of the request
 class ApiData<T> {
   DataStatus status;
   T data;
@@ -21,9 +19,7 @@ class ApiData<T> {
         status = Status;
 }
 
-/**
- * this function takes a response and a toJson constructor for a certain type and returns an ApiData object for the specified type.
- */
+/// this function takes a response and a toJson constructor for a certain type and returns an ApiData object for the specified type.
 
 ApiData<T> parseResponse<T>(http.Response res, T toJson(dynamic json)) {
   if (res.statusCode == 200) {
@@ -41,9 +37,7 @@ ApiData<T> parseResponse<T>(http.Response res, T toJson(dynamic json)) {
   return ApiData<T>(null, DataStatus.Failure);
 }
 
-/**
- * this function takes a response with no body and returns an ApiData<void> according to the status code.
- */
+/// this function takes a response with no body and returns an ApiData<void> according to the status code.
 
 ApiData<void> emptyResponseData(http.Response res) {
   DataStatus status;

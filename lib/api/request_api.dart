@@ -11,11 +11,8 @@ Future<ApiData<Request>> getRequest(http.Client client, Int32x4 id) {
   });
 }
 
-/**
- * gets a list of requests, it's purpose is for use in a list builder<br>
- * if messages is true, the requests will contain their messages, otherwise, they won't
- */
-
+/// gets a list of requests, it's purpose is for use in a list builder<br>
+/// if messages is true, the requests will contain their messages, otherwise, they won't
 Future<ApiData<List<Request>>> getMultipleRequests(http.Client client,
     {bool messages = false, int amount = 10, int index = 0}) {
   String url = api + "/request?messages=$messages&amount=$amount&index=$index";

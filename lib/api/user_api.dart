@@ -26,9 +26,8 @@ Future<ApiData<List<Student>>> getStudents(
   });
 }
 
-/**
- * does not immediately delete user, just prompts the server to send him an email to delete himself
- */
+/// does not immediately delete user, just prompts the server to send him an email to delete himself
+
 Future<ApiData<void>> deleteUser(http.Client client) {
   return client.delete(api + '/user').then(emptyResponseData);
 }
