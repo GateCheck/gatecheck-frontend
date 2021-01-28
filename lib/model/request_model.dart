@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:typed_data';
 import 'package:gatecheck_frontend/model/message_model.dart';
 import 'package:gatecheck_frontend/utils/string_uuid_conversion.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 enum RequestStatus { Pending, Rejected, Accepted }
 
@@ -20,7 +21,7 @@ class Request {
         creationDate = json['creationDate'],
         from = json['from'],
         to = json['to'],
-        status = json['status'],
+        status = EnumToString.fromString(RequestStatus.values, json['status']),
         id = stringToUUID(json['id']),
         sender = stringToUUID(json['sender']),
         receivers = [
@@ -36,7 +37,7 @@ class Request {
     'creationDate':creationDate,
     'from':from,
     'to':to,
-    'status':status,
+    'status':EnumToString.convertToString(status),
     'id':uuidToString(id),
     'sender':uuidToString(sender),
     'receivers':receivers.map(uuidToString).toList(),
