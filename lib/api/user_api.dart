@@ -1,72 +1,44 @@
 import 'package:http/http.dart' as http;
 import 'package:gatecheck_frontend/model/user_model.dart';
-import 'dart:convert';
-import 'package:gatecheck_frontend/api/api_data.dart';
-
-String api = '/api/v1';
+import 'package:gatecheck_frontend/api/api_base.dart';
 
 Future<ApiData<GenericUser>> currentUser(http.Client client) {
   return client.get(api + '/user').then((res) {
-    if (res.statusCode == 200) {
-      var json = jsonDecode(res.body);
-      return ApiData(GenericUser.fromJson(json), DataStatus.Success);
-    }
-    if (res.statusCode == 401) {
-      return ApiData<GenericUser>(null, DataStatus.Unauthorized);
-    }
-    return ApiData<GenericUser>(null, DataStatus.Failure);
+    return parseResponse(res, (json) => GenericUser.fromJson(json));
   });
 }
 
 Future<ApiData<List<Student>>> getStudents(
-    List<int> studentIds, bool all, http.Client client) {
+    http.Client client, Int32x4List studentIds, bool all) {
   String query;
   if (all) {
     query = "all=true";
   } else {
-    query = "uuid=" + studentIds.join() + "&all=false";
+    query = "uuid=" + studentIds.map(uuidToString).join(',') + "&all=false";
   }
-  
-  return client.get(api + '/user?' + query).then((res) {
-    if (res.statusCode == 200) {
-      List<Map<String, dynamic>> json =
-          jsonDecode(res.body).cast<Map<String, dynamic>>();
-      List<Student> students = json.map((e) => Student.fromJson(e));
-      return ApiData(students, DataStatus.Success);
-    }
 
-    if (res.statusCode == 401) return ApiData(null, DataStatus.Unauthorized);
-    return ApiData(null, DataStatus.Failure);
+  return client.get(api + '/user?' + query).then((res) {
+    return parseResponse(res, (value) {
+      List<Map<String, dynamic>> json = value.cast<Map<String, dynamic>>();
+      List<Student> students = json.map((e) => Student.fromJson(e));
+      return students;
+    });
   });
 }
+
+/// does not immediately delete user, just prompts the server to send him an email to delete himself
 
 Future<ApiData<void>> deleteUser(http.Client client) {
   return client.delete(api + '/user').then(emptyResponseData);
 }
 
-Future<ApiData<void>> updateCurrentUser(GenericUser user, http.Client client) {
+Future<ApiData<void>> updateCurrentUser(http.Client client, GenericUser user) {
   return client.put(api + '/user', body: user.toJson()).then(emptyResponseData);
 }
 
-Future<ApiData<void>> updateSpecificUser(GenericUser user, http.Client client) {
+Future<ApiData<void>> updateSpecificUser(http.Client client, GenericUser user) {
   var data = user.toJson();
   return client
       .put(api + '/user/' + data['id'], body: data)
       .then(emptyResponseData);
-}
-
-ApiData<void> emptyResponseData(http.Response res) {
-  DataStatus status;
-  switch (res.statusCode) {
-    case 200:
-      status = DataStatus.Success;
-      break;
-    case 401:
-      status = DataStatus.Unauthorized;
-      break;
-    default:
-      status = DataStatus.Failure;
-      break;
-  }
-  return ApiData(null, status);
 }
