@@ -3,9 +3,12 @@ export 'dart:typed_data';
 export 'package:gatecheck_frontend/utils/string_uuid_conversion.dart';
 
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'dart:convert' as convert;
 
-String api = '/api/v1';
+String host = "http://localhost:8080";
+String api = host + '/api/v1';
+http.Client client = new http.Client();
+
 
 enum DataStatus { Success, Unauthorized, Failure, ParsingException }
 
@@ -14,24 +17,24 @@ class ApiData<T> {
   DataStatus status;
   T data;
 
-  ApiData(T Data, DataStatus Status)
-      : data = Data,
-        status = Status;
+  ApiData(T data, DataStatus status)
+      : data = data,
+        status = status;
 }
 
 /// this function takes a response and a toJson constructor for a certain type and returns an ApiData object for the specified type.
 
-ApiData<T> parseResponse<T>(http.Response res, T toJson(dynamic json)) {
+ApiData<T> parseResponse<T>(http.Response res, T getResponseFromJson(dynamic json)) {
   if (res.statusCode == 200) {
     try {
-      var json = jsonDecode(res.body);
-      return ApiData(toJson(json), DataStatus.Success);
+      var json = convert.jsonDecode(res.body);
+      return ApiData(getResponseFromJson(json), DataStatus.Success);
     } catch (err, stacktrace) {
-      return ApiData<T>(null, DataStatus.ParsingException);
+      return ApiData<T>(err, DataStatus.ParsingException);
     }
   }
 
-  if (res.statusCode == 401) {
+  if (res.statusCode == 401 || res.statusCode == 403) {
     return ApiData<T>(null, DataStatus.Unauthorized);
   }
   return ApiData<T>(null, DataStatus.Failure);
@@ -53,4 +56,8 @@ ApiData<void> emptyResponseData(http.Response res) {
       break;
   }
   return ApiData(null, status);
+}
+
+String mapToJson<K, V>(Map<K, V> map) {
+  return convert.jsonEncode(map);
 }
